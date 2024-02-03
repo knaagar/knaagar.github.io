@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/kn.png">
+    <link rel="stylesheet" href="/style.css">
+    <title>Blog - How well do LLMs understand phonetics?</title>
+</head>
+
+<body>
+    <div d-style="false" class="responsive-navbar" id="navbar">
+        <a href="/" id="logo">knaagar</a>
+        <div class="links">
+            <a href="https://github.com/knaagar">github</a>
+            <a href="https://www.linkedin.com/in/kritika-naagar">linkedin</a>
+        </div>
+        </a>
+    </div>
+    <br><br><br>
+    <div class="main">
+        <div class="content">
+            <h1>How well do LLMs understand phonetics?</h1><br><br>
+            <p>
+                LLMs are doing really well on natural language tasks. So they should perform similarly well on phonetics
+                and rhyming tasks. But what we found out in our preliminary tests for our research is quite shocking!
+                <br><br>
+                Rhymes were scraped from the CMUDict, which is a dictionary of 134000 common words and its corresponding
+                ARPABET pronunciation, which is like a english-ised pronunciation transcription in American English.
+                Someone made a library to do the heavy lifting of coming up with perfect, internal and slant rhymes
+                given a word in the CMUDict, so we just looped through all the words and saved it in a CSV<br><br>
+                <b>Experiment 1:</b><br><br>
+                We asked ChatGPT4 to classify rhymes, giving it a zero-shot prompt: Does {word} rhyme with {word}?
+                (expected answer: yes/no)<br>
+                We have our database consisting of 135167 words and their rhymes classified in 3 types of rhymes:
+                Perfect, Internal, and Slant (We have extracted the database from CMU Dictionary.)
+                Surprisingly, GPT-4 said “no” to a lot of the perfect rhymes, which are the simplest test case.<br><br>
+                Accuracy for Does {word} rhyme with 'bout?
+            </p>
+            <br>
+            <div class="table">
+                <table>
+                    <thead>
+                        <tr>
+                            <td>Perfect Rhymes</th>
+                            <td>2.8% (1340/1378)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Internal Rhymes</td>
+                            <td>8.7% (643/704)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br>
+            <p>
+                <b>Experiment 2:</b><br><br>
+                This time we tried the experiment with 11 random words from the dataset. We improvised the prompt
+                -<br><br>
+                <i>System:</i> You have great rhyming knowledge. Perfect Rhyme (e.g., \"cat\" and \"hat\"), Internal
+                Rhyme
+                (e.g.,
+                \"moon\" and \"soon\"), Slant Rhyme (e.g., \"lake\" and \"luck\"); Internal rhyme often occurs within a
+                line
+                of poetry, where words within the same line share rhyming sounds. Slant rhyme involves a closer but not
+                perfect match in sounds. It adds a subtle and creative dimension to poetry, allowing for a broader range
+                of
+                word choices that sound similar. Perfect rhyme is a more straightforward match where the ending sounds
+                of
+                two words are identical.<br><br>
+                <i>User:</i> Given the word '{word}' and its potential rhyme '{rhyme}', determine whether they rhyme. If
+                they
+                do,
+                specify the type of rhyme: perfect rhyme, internal rhyme, or slant rhyme. The format of the output
+                should
+                be: \"Yes. Internal Rhyme\" if they rhyme and it is an internal rhyme, and \"No\" if they don't rhyme.
+            </p>
+            <br>
+            <div class="table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Word</th>
+                            <th>Total rhymes</th>
+                            <th>Total Perfect Rhymes</th>
+                            <th>Total Internal Rhymes</th>
+                            <th>Total Slant Rhymes</th>
+                            <th>‘No’ on perfect rhymes</th>
+                            <th>‘No’ on internal rhymes</th>
+                            <th>‘No’ on slant rhymes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>‘bout</td>
+                            <td>342</td>
+                            <td>43</td>
+                            <td>299</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>89</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>ashman</td>
+                            <td>466</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td>464</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>206</td>
+                        </tr>
+                        <tr>
+                            <td>building’s</td>
+                            <td>14</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>13</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>4</td>
+                        </tr>
+                        <tr>
+                            <td>comprises</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>downie</td>
+                            <td>76</td>
+                            <td>9</td>
+                            <td>6</td>
+                            <td>61</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>24</td>
+                        </tr>
+                        <tr>
+                            <td>klunder</td>
+                            <td>503</td>
+                            <td>14</td>
+                            <td>168</td>
+                            <td>321</td>
+                            <td>0</td>
+                            <td>30</td>
+                            <td>170</td>
+                        </tr>
+                        <tr>
+                            <td>larkey</td>
+                            <td>579</td>
+                            <td>15</td>
+                            <td>1</td>
+                            <td>563</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td>394</td>
+                        </tr>
+                        <tr>
+                            <td>splenic</td>
+                            <td>437</td>
+                            <td>29</td>
+                            <td>17</td>
+                            <td>391</td>
+                            <td>4</td>
+                            <td>4</td>
+                            <td>189</td>
+                        </tr>
+                        <tr>
+                            <td>temporizing</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>tomich</td>
+                            <td>358</td>
+                            <td>23</td>
+                            <td>20</td>
+                            <td>315</td>
+                            <td>9</td>
+                            <td>10</td>
+                            <td>174</td>
+                        </tr>
+                        <tr>
+                            <td>wardlaw</td>
+                            <td>10</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>10</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>4</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br>
+            <p>The accuracy for the output is shown in the table below (in percentages): </p>
+            <br>
+            <div class="table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Word</th>
+                            <th>Perfect Rhyme Accuracy</th>
+                            <th>Internal Rhyme Accuracy</th>
+                            <th>Slant Rhyme Accuracy</th>
+                            <th>Overall Accuracy for the word</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>‘bout</td>
+                            <td>97.6744186</td>
+                            <td>70.23411371</td>
+                            <td>-</td>
+                            <td>73.68421053</td>
+                        </tr>
+                        <tr>
+                            <td>ashman</td>
+                            <td>100</td>
+                            <td>-</td>
+                            <td>55.60344828</td>
+                            <td>55.79399142</td>
+                        </tr>
+                        <tr>
+                            <td>building’s</td>
+                            <td>100</td>
+                            <td>-</td>
+                            <td>69.23076923</td>
+                            <td>71.42857143</td>
+                        </tr>
+                        <tr>
+                            <td>comprises</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>downie</td>
+                            <td>100</td>
+                            <td>100</td>
+                            <td>60.6557377</td>
+                            <td>68.42105263</td>
+                        </tr>
+                        <tr>
+                            <td>klunder</td>
+                            <td>100</td>
+                            <td>82.14285714</td>
+                            <td>47.04049844</td>
+                            <td>60.23856859</td>
+                        </tr>
+                        <tr>
+                            <td>larkey</td>
+                            <td>86.66666667</td>
+                            <td>100</td>
+                            <td>30.01776199</td>
+                            <td>31.60621762</td>
+                        </tr>
+                        <tr>
+                            <td>splenic</td>
+                            <td>86.20689655</td>
+                            <td>76.47058824</td>
+                            <td>51.66240409</td>
+                            <td>54.91990847</td>
+                        </tr>
+                        <tr>
+                            <td>temporizing</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>100</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td>tomich</td>
+                            <td>60.86956522</td>
+                            <td>50</td>
+                            <td>44.76190476</td>
+                            <td>46.08938547</td>
+                        </tr>
+                        <tr>
+                            <td>wardlaw</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>60</td>
+                            <td>60</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br>
+            <p>Out of all the 'Yes' given by the model, how many of them were classified correctly by the model
+                (perfect, internal, slant rhymes classification) is given in the table below: </p>
+            <br>
+            <div class="table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Word</th>
+                            <th>Total ‘Yes’</th>
+                            <th>Correct Classification</th>
+                            <th>Total perfect classified</th>
+                            <th>Total internal classified</th>
+                            <th>Total slant classified</th>
+                            <th>Total correct perfect classified</th>
+                            <th>Total correct internal classified</th>
+                            <th>Total correct slant classified</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>‘bout</td>
+                            <td>252</td>
+                            <td>72</td>
+                            <td>42</td>
+                            <td>210</td>
+                            <td>0</td>
+                            <td>41</td>
+                            <td>31</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>ashman</td>
+                            <td>260</td>
+                            <td>204</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td>258</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td>202</td>
+                        </tr>
+                        <tr>
+                            <td>building’s</td>
+                            <td>10</td>
+                            <td>9</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>9</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>8</td>
+                        </tr>
+                        <tr>
+                            <td>comprises</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>downie</td>
+                            <td>52</td>
+                            <td>41</td>
+                            <td>9</td>
+                            <td>6</td>
+                            <td>37</td>
+                            <td>8</td>
+                            <td>0</td>
+                            <td>33</td>
+                        </tr>
+                        <tr>
+                            <td>klunder</td>
+                            <td>303</td>
+                            <td>204</td>
+                            <td>14</td>
+                            <td>138</td>
+                            <td>151</td>
+                            <td>13</td>
+                            <td>57</td>
+                            <td>134</td>
+                        </tr>
+                        <tr>
+                            <td>larkey</td>
+                            <td>183</td>
+                            <td>116</td>
+                            <td>13</td>
+                            <td>1</td>
+                            <td>169</td>
+                            <td>9</td>
+                            <td>0</td>
+                            <td>107</td>
+                        </tr>
+                        <tr>
+                            <td>splenic</td>
+                            <td>240</td>
+                            <td>180</td>
+                            <td>25</td>
+                            <td>13</td>
+                            <td>202</td>
+                            <td>20</td>
+                            <td>1</td>
+                            <td>159</td>
+                        </tr>
+                        <tr>
+                            <td>temporizing</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>tomich</td>
+                            <td>165</td>
+                            <td>114</td>
+                            <td>14</td>
+                            <td>10</td>
+                            <td>141</td>
+                            <td>1</td>
+                            <td>6</td>
+                            <td>107</td>
+                        </tr>
+                        <tr>
+                            <td>wardlaw</td>
+                            <td>6</td>
+                            <td>4</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>6</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>4</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br>
+            <p>The accuracy of class by the model is given in the table below: (in percentages) </p>
+            <br>
+            <div class="table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Word</th>
+                            <th>Accuracy for correct perfect rhyme classification </th>
+                            <th>Accuracy for correct internal rhyme classification </th>
+                            <th>Accuracy for correct slant rhyme classification </th>
+                            <th>Accuracy for correct rhyme classification </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>‘bout</td>
+                            <td>97.61904762</td>
+                            <td>14.76190476</td>
+                            <td>-</td>
+                            <td>28.57142857</td>
+                        </tr>
+                        <tr>
+                            <td>ashman</td>
+                            <td>100</td>
+                            <td>-</td>
+                            <td>78.29457364</td>
+                            <td>78.46153846</td>
+                        </tr>
+                        <tr>
+                            <td>building’s</td>
+                            <td>100</td>
+                            <td>-</td>
+                            <td>88.88888889</td>
+                            <td>90</td>
+                        </tr>
+                        <tr>
+                            <td>comprises</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>downie</td>
+                            <td>88.88888889</td>
+                            <td>0</td>
+                            <td>89.18918919</td>
+                            <td>78.84615385</td>
+                        </tr>
+                        <tr>
+                            <td>klunder</td>
+                            <td>92.85714286</td>
+                            <td>41.30434783</td>
+                            <td>88.74172185</td>
+                            <td>67.32673267</td>
+                        </tr>
+                        <tr>
+                            <td>larkey</td>
+                            <td>69.23076923</td>
+                            <td>0</td>
+                            <td>63.31360947</td>
+                            <td>63.38797814</td>
+                        </tr>
+                        <tr>
+                            <td>splenic</td>
+                            <td>80</td>
+                            <td>7.692307692</td>
+                            <td>78.71287129</td>
+                            <td>75</td>
+                        </tr>
+                        <tr>
+                            <td>temporizing</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>tomich</td>
+                            <td>7.142857143</td>
+                            <td>60</td>
+                            <td>75.88652482</td>
+                            <td>69.09090909</td>
+                        </tr>
+                        <tr>
+                            <td>wardlaw</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>66.66666667</td>
+                            <td>66.66666667</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Improving the prompt (making it more complex and with extra details), LLMs have been able to perform a
+                lot better than 0-shot prompting. Still, the average accuracy for identification of rhyme is 62.22% and
+                the average accuracy for correct classification is 61.74%</p>
+            <br>
+            <p>
+                <b>Experiment 3:</b><br><br>
+                Wug test of rhyme generation on GPT3.5 as well as GPT4. Below are the random three words from the 100
+                words generated by each model.<br><br>
+                GPT4:<br>
+            </p>
+            <div class="table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Word</th>
+                            <th>IPA Transcription</th>
+                            <th>Rhyme Candidates</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>quoblate</td>
+                            <td>/kwɒbleɪt/</td>
+                            <td>great,late,rate,estimate,relate,plate,date</td>
+                        </tr>
+                        <tr>
+                            <td>blurst</td>
+                            <td>/blɜ:rst/</td>
+                            <td>first, burst, thirst, worst, rehearsed, versed, accursed</td>
+                        </tr>
+                        <tr>
+                            <td>flaridge</td>
+                            <td>/ˈflærɪdʒ/</td>
+                            <td>bridge, ridge, fridge, sieve, privilege, oblige</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br>
+            <p>GPT3.5:<br></p>
+            <div class="table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Word</th>
+                            <th>IPA Transcription</th>
+                            <th>Rhyme Candidates</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>fauxstalgia</td>
+                            <td>/foʊsˈtældʒə/</td>
+                            <td>nostalgia, faux, glossia, tossia, dossia, embossia, flossia, embossia</td>
+                        </tr>
+                        <tr>
+                            <td>burstliss</td>
+                            <td>/ˈbɜːrstlɪs/</td>
+                            <td>burst, bliss, hiss, miss, abyss, reminisce, dismiss, abyss</td>
+                        </tr>
+                        <tr>
+                            <td>glimmerine</td>
+                            <td>/ˈɡlɪməriːn/</td>
+                            <td>tangerine, marine, serene, machine, caffeine, sardine, guillotine, routine, eighteen,
+                                unseen</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br>
+            <p>The rhyme generation looks better than rhyme classification done by GPT4 and GPT3.5 models.</p>
+            </p>
+            <br><br><br><br>
+            <p style="text-align: center;">© 2024 Kritika Naagar</p>
+        </div>
+    </div>
+</body>
+
+</html>

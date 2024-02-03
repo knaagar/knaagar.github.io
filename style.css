@@ -109,3 +109,18 @@ a:hover {
 .date {
     opacity: 0.5;
 }
+.table {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+table {
+    font-family: var(--f1);
+    border-collapse: collapse;
+    margin: 20px;
+}
+td, th {
+    border: 1px solid var(--c1);
+    padding: 8px;
+}
